@@ -1,0 +1,15 @@
+﻿//
+// This file contains training data for a neural network.
+// The first field is the year and month. The second field is the total number of international airline passengers for the month, in thousands. 
+//
+"1949-01";112
+"1949-02";118
+"1949-03";132
+"1949-04";129
+"1949-05";121
+"1949-06";135
+"1949-07";148
+"1949-08";148
+...
+"1960-11";390
+"1960-12";432
