@@ -9,6 +9,11 @@ namespace NeuralNetwork
 	public class Neuron
 	{
 		Vector Inputs, WeightFactors;
+
+		public Neuron()
+		{
+		}
+
 		public Neuron(Vector Inputs, Vector WeightFactors)
 		{
 			this.Inputs = Inputs;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neural.Network
+namespace NeuralNetwork
 {
 	class Program
 	{
@@ -26,7 +26,7 @@ namespace Neural.Network
 
 		private static void ShowVector(double[] weights, int decimals, int rowLength, bool v3)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 
 		private static double[] GetTrainData(string fileName)
