@@ -8,25 +8,26 @@ namespace NeuralNetwork
 	/// </summary>
 	public class Neuron
 	{
-		Vector Inputs, WeightFactors;
-
-		public Neuron()
+		public Vector Inputs, Weights;
+		public Double Bias;
+		public Neuron(int numInputs)
 		{
+			var random = new Random();
+			this.Inputs = new Vector(numInputs);
+			this.Weights = new Vector(numInputs);
+			this.Bias = random.NextDouble();
+			for (int i = 0; i < numInputs; i++) Weights[i] = random.NextDouble();
 		}
 
-		public Neuron(Vector Inputs, Vector WeightFactors)
-		{
-			this.Inputs = Inputs;
-			this.WeightFactors = WeightFactors;
-		}
 		public double Execute()
 		{
-			return Sigmoid(Inputs * WeightFactors);
+			return Sigmoid(Inputs * Weights - Bias);
 		}
 
 		double Sigmoid(double z)
 		{
 			return 1 / (1 + Math.Exp(-z));
 		}
+
 	}
 }
