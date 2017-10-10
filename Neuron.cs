@@ -10,13 +10,13 @@ namespace NeuralNetwork
 	{
 		public Vector Inputs, Weights;
 		public Double Bias;
-		public Neuron(int numInputs)
+		public Neuron(Vector inputs)
 		{
+			this.Inputs = inputs;
+			this.Weights = new Vector(this.Inputs.Length);
 			var random = new Random();
-			this.Inputs = new Vector(numInputs);
-			this.Weights = new Vector(numInputs);
 			this.Bias = random.NextDouble();
-			for (int i = 0; i < numInputs; i++) Weights[i] = random.NextDouble();
+			for (int i = 0; i < this.Inputs.Length; i++) this.Weights[i] = random.NextDouble();
 		}
 
 		public double Execute()
