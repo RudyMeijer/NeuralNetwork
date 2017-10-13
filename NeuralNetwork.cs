@@ -45,9 +45,10 @@ namespace NeuralNetwork
 				this.Inputs = SetInputs(trainData, idx);
 				this.ExpectedOutput = trainData[Inputs.Length + idx];
 				ComputeOutputs();
+				var Y = Output[0];
 				BackPropagation(this.ExpectedOutput, learnRate);//UpdateWeights();
-																//mse = //GetMeansSquareError();
-				++epoch; ++idx;
+				Program.ShowVector(GetWeigths());												//mse = //GetMeansSquareError();
+				++epoch; //++idx;
 			}
 
 			return GetWeigths();
@@ -75,40 +76,33 @@ namespace NeuralNetwork
 			for (int i = 0; i < hGrads.Length; ++i)
 			{
 				// derivative of tanh = (1 - y) * (1 + y)
-				double derivative = Output[i] * (1 - Output[i]);
+				double derivative = (1 - Hidden[i]) * (1 + Hidden[i]);
 				double sum = 0.0;
 				for (int j = 0; j < Output.Length; ++j) // each hidden delta is the sum of numOutput terms
 				{
-					double x = oGrads[j] * hiddenNeurons[i].Weights[j];// hoWeights[i][j];
+					double x = oGrads[j] * outputNeurons[j].Weights[i];
 					sum += x;
 				}
 				hGrads[i] = derivative * sum;
 			}
+
 			// 3a. update hidden weights (gradients must be computed right-to-left but weights
 			// can be updated in any order)
-			//for (int i = 0; i < ihWeights.Length; ++i) // 0..2 (3)
-			//{
-			//	for (int j = 0; j < ihWeights[0].Length; ++j) // 0..3 (4)
-			//	{
-			//		double delta = learnRate * hGrads[j] * inputs[i]; // compute the new delta
-			//		ihWeights[i][j] += delta; // update. note we use '+' instead of '-'. this can be very tricky.
-			//								  // now add momentum using previous delta. on first pass old value will be 0.0 but that's OK.
-			//		ihWeights[i][j] += momentum * ihPrevWeightsDelta[i][j];
-			//		ihWeights[i][j] -= (weightDecay * ihWeights[i][j]); // weight decay
-			//		ihPrevWeightsDelta[i][j] = delta; // don't forget to save the delta for momentum 
-			//	}
-			//}
+			for (int i = 0; i < numInputs; ++i) // 0..2 (3)
+			{
+				for (int j = 0; j < Hidden.Length; ++j) // 0..3 (4)
+				{
+					double delta = learnRate * hGrads[j] * hiddenNeurons[j].Inputs[i]; // compute the new delta
+					hiddenNeurons[j].Weights[i] += delta; // update. note we use '+' instead of '-'. this can be very tricky.
+				}
+			}
 
-			//// 3b. update hidden biases
-			//for (int i = 0; i < hBiases.Length; ++i)
-			//{
-			//	double delta = learnRate * hGrads[i] * 1.0; // t1.0 is constant input for bias; could leave out
-			//	hBiases[i] += delta;
-			//	hBiases[i] += momentum * hPrevBiasesDelta[i]; // momentum
-			//	hBiases[i] -= (weightDecay * hBiases[i]); // weight decay
-			//	hPrevBiasesDelta[i] = delta; // don't forget to save the delta
-			//}
-
+			// 3b. update hidden biases
+			for (int i = 0; i < Hidden.Length; ++i)
+			{
+				double delta = learnRate * hGrads[i] * 1.0; // t1.0 is constant input for bias; could leave out
+				hiddenNeurons[i].Bias += delta;
+			}
 		}
 
 		private double[,] GetWeigths()
@@ -119,13 +113,6 @@ namespace NeuralNetwork
 				for (int j = 0; j < Inputs.Length; j++)
 				{
 					weights[i, j] = hiddenNeurons[i].Weights[j];
-				}
-			}
-			for (int i = 0; i < outputNeurons.Count; i++)
-			{
-				for (int j = 0; j < Hidden.Length; j++)
-				{
-					weights[i, j] = outputNeurons[i].Weights[j];
 				}
 			}
 			return weights;
