@@ -4,15 +4,17 @@ using System.Collections.Generic;
 
 namespace NeuralNetwork
 {
-	internal class NeuralNetwork
+	public class NeuralNetwork
 	{
-		private int numInputs;
-		private Vector Inputs;
-		private Vector Hidden;
-		private Vector Output;
-		private double ExpectedOutput;
-		private List<Neuron> hiddenNeurons = new List<Neuron>();
-		private List<Neuron> outputNeurons = new List<Neuron>();
+		public int numInputs;
+		public int numHidden;
+		public int numOutputs;
+		public Vector Inputs;
+		public Vector Hidden;
+		public Vector Output;
+		public double ExpectedOutput;
+		public List<Neuron> hiddenNeurons = new List<Neuron>();
+		public List<Neuron> outputNeurons = new List<Neuron>();
 		/// <summary>
 		/// Create Neural network with Hidden- and Output neurons.
 		/// </summary>
@@ -22,11 +24,15 @@ namespace NeuralNetwork
 		public NeuralNetwork(int numInputs, int numHidden, int numOutputs)
 		{
 			this.numInputs = numInputs;
+			this.numHidden = numHidden;
+			this.numOutputs = numOutputs;
 			this.Inputs = new Vector(numInputs);
 			this.Hidden = new Vector(numHidden);
 			this.Output = new Vector(numOutputs);
+			hiddenNeurons.Clear();
+			outputNeurons.Clear();
 			for (int i = 0; i < numHidden; i++) this.hiddenNeurons.Add(new Neuron(this.Inputs));
-			for (int i = 0; i < numOutputs; i++) this.outputNeurons.Add(new Neuron(this.Hidden));
+			for (int i = 0; i < numOutputs; i++) this.outputNeurons.Add(new Neuron((numHidden > 0) ? Hidden : Inputs));
 		}
 		/// <summary>
 		/// Train the neural network with train data.
@@ -35,7 +41,7 @@ namespace NeuralNetwork
 		/// <param name="maxEpochs"></param>
 		/// <param name="learnRate"></param>
 		/// <returns></returns>
-		internal double[,] Train(double[] trainData, int maxEpochs, double learnRate)
+		public void Train(double[] trainData, int maxEpochs, double learnRate)
 		{
 			var mse = 1.0;
 			int epoch = 0;
@@ -43,54 +49,54 @@ namespace NeuralNetwork
 			while (epoch < maxEpochs && mse > 0.01 && (Inputs.Length + idx) < trainData.Length)
 			{
 				this.Inputs = SetInputs(trainData, idx);
-				this.ExpectedOutput = trainData[Inputs.Length + idx];
-				ComputeOutputs();
-				var Y = Output[0];
+				this.ExpectedOutput = trainData[numInputs + idx];
+				var Y = ComputeOutputs();
 				BackPropagation(this.ExpectedOutput, learnRate);//UpdateWeights();
-				Program.ShowVector(GetWeigths());												//mse = //GetMeansSquareError();
-				++epoch; //++idx;
+				Program.ShowNeuralNetwork(this);
+				++epoch; ////++idx;
 			}
 
-			return GetWeigths();
 		}
 
 		/// <summary>
 		/// Update the weights and biases using back-propagation.
+		/// Index: i=Input, j=Hidden and k=Output neurons. 
 		/// </summary>
 		private void BackPropagation(double expectedOutput, double learnRate)
 		{
 			//
 			// 1. compute output gradients
 			//
-			var oGrads = new Double[Output.Length];
-			var hGrads = new Double[Hidden.Length];
-			for (int i = 0; i < oGrads.Length; ++i)
+			var oGrads = new Double[numOutputs];
+			var hGrads = new Double[numHidden];
+			for (int k = 0; k < numOutputs; ++k)
 			{
 				//For sigmoid activation, the derivative of y = log-sigmoid(x) is y * (1 - y)
-				double derivative = Output[i] * (1 - Output[i]);
+				double derivative = Output[k] * (1 - Output[k]);
 				// 'mean squared error version' includes (1-y)(y) derivative
-				oGrads[i] = derivative * (ExpectedOutput - Output[i]);
+				oGrads[k] = derivative * (ExpectedOutput - Output[k]);
 			}
-
+			//
 			// 2. compute hidden gradients
-			for (int i = 0; i < hGrads.Length; ++i)
+			//
+			for (int j = 0; j < numHidden; ++j)
 			{
 				// derivative of tanh = (1 - y) * (1 + y)
-				double derivative = (1 - Hidden[i]) * (1 + Hidden[i]);
+				double derivative = (1 - Hidden[j]) * (1 + Hidden[j]);
 				double sum = 0.0;
-				for (int j = 0; j < Output.Length; ++j) // each hidden delta is the sum of numOutput terms
+				for (int k = 0; k < numOutputs; ++k) // each hidden delta is the sum of numOutput terms
 				{
-					double x = oGrads[j] * outputNeurons[j].Weights[i];
+					double x = oGrads[k] * outputNeurons[k].Weights[j];
 					sum += x;
 				}
-				hGrads[i] = derivative * sum;
+				hGrads[j] = derivative * sum;
 			}
 
 			// 3a. update hidden weights (gradients must be computed right-to-left but weights
 			// can be updated in any order)
-			for (int i = 0; i < numInputs; ++i) // 0..2 (3)
+			for (int j = 0; j < numHidden; ++j)
 			{
-				for (int j = 0; j < Hidden.Length; ++j) // 0..3 (4)
+				for (int i = 0; i < numInputs; ++i)
 				{
 					double delta = learnRate * hGrads[j] * hiddenNeurons[j].Inputs[i]; // compute the new delta
 					hiddenNeurons[j].Weights[i] += delta; // update. note we use '+' instead of '-'. this can be very tricky.
@@ -98,19 +104,29 @@ namespace NeuralNetwork
 			}
 
 			// 3b. update hidden biases
-			for (int i = 0; i < Hidden.Length; ++i)
+			for (int j = 0; j < numHidden; ++j)
 			{
-				double delta = learnRate * hGrads[i] * 1.0; // t1.0 is constant input for bias; could leave out
-				hiddenNeurons[i].Bias += delta;
+				double delta = learnRate * hGrads[j] * 1.0; // t1.0 is constant input for bias; could leave out
+				hiddenNeurons[j].Bias += delta;
+			}
+			// 4. update hidden-output weights
+			for (int k = 0; k < numOutputs; ++k)
+			{
+				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
+				{
+					// see above: hOutputs are inputs to the nn outputs
+					double delta = learnRate * oGrads[k] * outputNeurons[k].Inputs[j];// ((numHidden>0)?Hidden[j]:Inputs[j]);
+					outputNeurons[k].Weights[j] += delta;
+				}
 			}
 		}
 
 		private double[,] GetWeigths()
 		{
-			double[,] weights = new Double[hiddenNeurons.Count, Inputs.Length];
-			for (int i = 0; i < hiddenNeurons.Count; i++)
+			double[,] weights = new Double[numHidden, numInputs];
+			for (int i = 0; i < numHidden; i++)
 			{
-				for (int j = 0; j < Inputs.Length; j++)
+				for (int j = 0; j < numInputs; j++)
 				{
 					weights[i, j] = hiddenNeurons[i].Weights[j];
 				}
@@ -118,10 +134,11 @@ namespace NeuralNetwork
 			return weights;
 		}
 
-		private void ComputeOutputs()
+		private Vector ComputeOutputs()
 		{
-			for (int i = 0; i < hiddenNeurons.Count; i++) this.Hidden[i] = hiddenNeurons[i].Execute();
-			for (int i = 0; i < outputNeurons.Count; i++) this.Output[i] = outputNeurons[i].Execute();
+			for (int i = 0; i < numHidden; i++) this.Hidden[i] = hiddenNeurons[i].ExecuteIW();
+			for (int i = 0; i < numOutputs; i++) this.Output[i] = outputNeurons[i].ExecuteIW();
+			return Output;
 		}
 
 		private Vector SetInputs(double[] trainData, int idx)

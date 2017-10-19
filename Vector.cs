@@ -43,7 +43,8 @@ namespace Lib
 			var s = "";
 			for (int i = 0; i < Length; i++)
 			{
-				s += ((i==0)?"":", ")+items[i].ToString();
+				//s += ((i == 0) ? "" : ", ") + items[i].ToString("6:f2");
+				s += ((i == 0) ? "" : ", ") + $"{items[i],6:f2}";
 			}
 			return s;
 		}
