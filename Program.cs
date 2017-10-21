@@ -13,7 +13,7 @@ namespace NeuralNetwork
 		static void Main(string[] args)
 		{
 			var numInputs = 1; // Equal to rolling window size.
-			var numHidden = 0;
+			var numHidden = 2;
 			var numOutputs = 1;
 			var nn = new NeuralNetwork(numInputs, numHidden, numOutputs);
 			//
@@ -27,10 +27,12 @@ namespace NeuralNetwork
 			//
 			// Train the neural network with traning data.
 			//
-			var maxEpochs = 10000;
-			var learnRate = 0.01;
-			nn.Train(trainData, maxEpochs, learnRate);
-			//ShowNeuralNetwork(nn);
+			trainData = new double[] { 1, 1 }; // Size is numInputs + 1
+
+			nn.Train(trainData, maxEpochs: 100, learnRate: 0.1);
+			ShowNeuralNetwork(nn);
+			Debug.WriteIf(nn.mse >= 100, "NO CONVERGENCE ");
+			Debug.WriteLine("================== Done ==================");
 		}
 
 		public static void ShowNeuralNetwork(NeuralNetwork nn)
@@ -47,7 +49,7 @@ namespace NeuralNetwork
 					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {nn.Hidden[j],6:f2} * {nn.outputNeurons[k].Weights[j]:f2}");
 				}
 				//Debug.WriteLine($"Output weights {nn.outputNeurons[k].Weights}");
-				Debug.WriteLine($"Output = {nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2}");
+				Debug.WriteLine($"Output = {nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} epoch {nn.epoch} mse = {nn.mse:f2}");
 			}
 		}
 

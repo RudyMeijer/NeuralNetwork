@@ -1,6 +1,7 @@
 ﻿using Lib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace NeuralNetwork
 {
@@ -16,6 +17,9 @@ namespace NeuralNetwork
 		public double ExpectedOutput;
 		public List<Neuron> hiddenNeurons = new List<Neuron>();
 		public List<Neuron> outputNeurons = new List<Neuron>();
+		public double mse;
+		public int epoch;
+		public int idx;
 		#endregion
 		/// <summary>
 		/// Create Neural network with Hidden- and Output neurons.
@@ -45,18 +49,18 @@ namespace NeuralNetwork
 		/// <returns></returns>
 		public double Train(double[] trainData, int maxEpochs, double learnRate)
 		{
-			var mse = 1.0;
-			int epoch = 0;
-			int idx = 0;
-			while (epoch < maxEpochs && mse > 0.01 && (Inputs.Length + idx) < trainData.Length)
+			mse = 1.0;
+			epoch = 0;
+			idx = 0;
+			while (epoch < maxEpochs && mse > 0.01 && mse < 100 && (Inputs.Length + idx) < trainData.Length)
 			{
 				this.Inputs = SetInputs(trainData, idx);
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
+				mse = Math.Abs(ExpectedOutput-Output[0]);
 				Program.ShowNeuralNetwork(this);
 				BackPropagation(this.ExpectedOutput, learnRate);// Update Weights;
 				++epoch; //++idx;
-				mse = Math.Abs(ExpectedOutput-Output[0]);
 			}
 			return mse;
 		}
@@ -120,7 +124,7 @@ namespace NeuralNetwork
 				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
 				{
 					// see above: hOutputs are inputs to the nn outputs
-					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j];// ((numHidden>0)?Hidden[j]:Inputs[j]);
+					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j];
 					outputNeurons[k].Weights[j] += delta;
 				}
 			}
