@@ -46,10 +46,10 @@ namespace NeuralNetwork
 			{
 				for (int j = 0; j < nn.numHidden; j++)
 				{
-					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {nn.Hidden[j],6:f2} * {nn.outputNeurons[k].Weights[j]:f2}");
+					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {nn.Hidden[j],6:f2} * {nn.outputNeurons[k].Weights[j]:f2} hGrad {nn.hGrads[j]:f2}");
 				}
 				//Debug.WriteLine($"Output weights {nn.outputNeurons[k].Weights}");
-				Debug.WriteLine($"Output = {nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} epoch {nn.epoch} mse = {nn.mse:f2}");
+				Debug.WriteLine($"Output = {nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} epoch {nn.epoch} mse = {nn.mse:f2}");
 			}
 		}
 

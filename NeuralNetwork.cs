@@ -20,6 +20,8 @@ namespace NeuralNetwork
 		public double mse;
 		public int epoch;
 		public int idx;
+		public double[] oGrads;
+		public double[] hGrads;
 		#endregion
 		/// <summary>
 		/// Create Neural network with Hidden- and Output neurons.
@@ -58,47 +60,29 @@ namespace NeuralNetwork
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
 				mse = Math.Abs(ExpectedOutput-Output[0]);
-				Program.ShowNeuralNetwork(this);
-				BackPropagation(this.ExpectedOutput, learnRate);// Update Weights;
+				BackPropagation(this.ExpectedOutput, learnRate);// Compute gradients and update Weights;
 				++epoch; //++idx;
 			}
 			return mse;
 		}
 
 		/// <summary>
-		/// Update the weights and biases using back-propagation.
-		/// Index: i=Input, j=Hidden and k=Output neurons. 
+		/// Compute gradients and update weights and biases using back-propagation.
+		/// 
+		/// Usage index i,j,k:
+		/// i = index Input neurons.
+		/// j = index Hidden neurons.
+		/// k = index Output neurons.
 		/// </summary>
 		private void BackPropagation(double expectedOutput, double learnRate)
 		{
-			//
-			// 1. compute output gradients
-			//
-			var oGrads = new Double[numOutputs];
-			var hGrads = new Double[numHidden];
-			for (int k = 0; k < numOutputs; ++k)
-			{
-				//For sigmoid activation, the derivative of y = log-sigmoid(x) is y * (1 - y)
-				double derivative = 1;// Output[k] * (1 - Output[k]);
-				// 'mean squared error version' includes (1-y)(y) derivative
-				oGrads[k] = derivative * (ExpectedOutput - Output[k]);
-			}
-			#region HIDDEN
-			//
-			// 2. compute hidden gradients
-			//
-			for (int j = 0; j < numHidden; ++j)
-			{
-				// derivative of tanh = (1 - y) * (1 + y)
-				double derivative = 1;// (1 - Hidden[j]) * (1 + Hidden[j]);
-				double sum = 0.0;
-				for (int k = 0; k < numOutputs; ++k) // each hidden delta is the sum of numOutput terms
-				{
-					double x = oGrads[k] * outputNeurons[k].Weights[j];
-					sum += x;
-				}
-				hGrads[j] = derivative * sum;
-			}
+			ComputeGradients();
+			Program.ShowNeuralNetwork(this);
+			UpdateWeights(learnRate);
+		}
+
+		private void UpdateWeights(double learnRate)
+		{
 
 			// 3a. update hidden weights (gradients must be computed right-to-left but weights
 			// can be updated in any order)
@@ -117,8 +101,7 @@ namespace NeuralNetwork
 				double delta = learnRate * hGrads[j] * 1.0; // t1.0 is constant input for bias; could leave out
 				hiddenNeurons[j].Bias += delta;
 			}
-			#endregion
-			// 4. update hidden-output weights
+			// 4. update output weights
 			for (int k = 0; k < numOutputs; ++k)
 			{
 				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
@@ -127,6 +110,37 @@ namespace NeuralNetwork
 					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j];
 					outputNeurons[k].Weights[j] += delta;
 				}
+			}
+		}
+
+		private void ComputeGradients()
+		{
+			//
+			// 1. compute output gradients
+			//
+			oGrads = new Double[numOutputs];
+			hGrads = new Double[numHidden];
+			for (int k = 0; k < numOutputs; ++k)
+			{
+				//For sigmoid activation, the derivative of y = log-sigmoid(x) is y * (1 - y)
+				double derivative = 1;// Output[k] * (1 - Output[k]);
+									  // 'mean squared error version' includes (1-y)(y) derivative
+				oGrads[k] = derivative * (ExpectedOutput - Output[k]);
+			}
+			//
+			// 2. compute hidden gradients
+			//
+			for (int j = 0; j < numHidden; ++j)
+			{
+				// derivative of tanh = (1 - y) * (1 + y)
+				double derivative = 1;// (1 - Hidden[j]) * (1 + Hidden[j]);
+				double sum = 0.0;
+				for (int k = 0; k < numOutputs; ++k) // each hidden delta is the sum of numOutput terms
+				{
+					double x = oGrads[k] * outputNeurons[k].Weights[j];
+					sum += x;
+				}
+				hGrads[j] = derivative * sum;
 			}
 		}
 
