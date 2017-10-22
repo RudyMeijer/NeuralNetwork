@@ -43,12 +43,6 @@ namespace NeuralNetwork
 			}
 			Debug.WriteIf(mse >= 100, "NO CONVERGENCE ");
 		}
-		/// <summary>
-		/// Create Neural network with Hidden- and Output neurons.
-		/// </summary>
-		/// <param name="numInputs"></param>
-		/// <param name="numHidden"></param>
-		/// <param name="numOutputs"></param>
 		public NeuralNetwork(int numInputs, int numHidden, int numOutputs)
 		{
 			this.numInputs = numInputs;
@@ -62,31 +56,23 @@ namespace NeuralNetwork
 			for (int i = 0; i < numHidden; i++) this.hiddenNeurons.Add(new Neuron(inputs: this.Inputs));
 			for (int i = 0; i < numOutputs; i++) this.outputNeurons.Add(new Neuron(inputs: (numHidden > 0) ? Hidden : Inputs));
 		}
-		/// <summary>
-		/// Train the neural network with train data.
-		/// </summary>
-		/// <param name="trainData"></param>
-		/// <param name="maxEpochs"></param>
-		/// <param name="learnRate"></param>
-		/// <returns></returns>
 		public double Train(double[] trainData, int maxEpochs, double learnRate)
 		{
 			this.LearnRate = learnRate;
 			mse = 1.0;
 			Epoch = 0;
 			var idx = 0;
-			while (mse > 0.01 && mse < 100 && ++Epoch < maxEpochs) // for time related datastreams && (Inputs.Length + idx) < trainData.Length)
+			while (mse > 0.01 && mse < 100 && ++Epoch <= maxEpochs) // for time related datastreams && (Inputs.Length + idx) < trainData.Length)
 			{
 				this.Inputs = SetInputs(trainData, idx);
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
 				this.mse = Math.Abs(ExpectedOutput - Output[0]);
 				BackPropagation(this.ExpectedOutput, learnRate);// Compute gradients and update Weights;
-				//++idx;
+																//++idx;
 			}
 			return mse;
 		}
-
 		/// <summary>
 		/// Compute gradients and update weights and biases using back-propagation.
 		/// 
@@ -163,7 +149,14 @@ namespace NeuralNetwork
 					sum += x;
 				}
 				hGrads[j] = derivative * sum;
+				SetRange(-10.0, 10.0, ref hGrads[j]);
 			}
+		}
+
+		private void SetRange(double min, double max, ref double v3)
+		{
+			if (v3 < min) v3 = min;
+			if (v3 > max) v3 = max;
 		}
 
 		private Vector ComputeOutputs()
