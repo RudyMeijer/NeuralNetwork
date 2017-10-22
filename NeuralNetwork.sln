@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "NeuralNetwork.csproj", "{557D7F06-D02A-4BDC-9437-281C5C7793F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkUnitTests", "..\NeuralNetworkUnitTests\NeuralNetworkUnitTests.csproj", "{B48C71B9-5ADA-4512-AF9A-0AD76CD46F8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{B48C71B9-5ADA-4512-AF9A-0AD76CD46F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

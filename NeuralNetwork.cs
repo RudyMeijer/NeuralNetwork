@@ -128,6 +128,7 @@ namespace NeuralNetwork
 				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
 				{
 					// see above: hOutputs are inputs to the nn outputs
+					// Divide output gradients over all inputs.
 					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
 					outputNeurons[k].Weights[j] += delta;
 				}
