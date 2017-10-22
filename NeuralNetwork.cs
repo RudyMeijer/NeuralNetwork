@@ -17,7 +17,7 @@ namespace NeuralNetwork
 		public double ExpectedOutput;
 		public List<Neuron> hiddenNeurons = new List<Neuron>();
 		public List<Neuron> outputNeurons = new List<Neuron>();
-		public double MeanSquareError { get; private set; }
+		public double mse { get; private set; }
 		public int Epoch { get; private set; }
 
 		public double LearnRate { get; private set; }
@@ -39,9 +39,9 @@ namespace NeuralNetwork
 				{
 					Debug.WriteLine($"Weights {hiddenNeurons[j].Weights} output H{j,-2}: {Hidden[j],6:f2} * {outputNeurons[k].Weights[j]:f2} hGrad {hGrads[j]:f2}");
 				}
-				Debug.WriteLine($"Output = {Output[k]:f2} Target = {ExpectedOutput:f2} ograd {oGrads[k]:f2} learnRate {LearnRate} epoch {Epoch} mse = {MeanSquareError:f2}");
+				Debug.WriteLine($"Output = {Output[k]:f2} Target = {ExpectedOutput:f2} ograd {oGrads[k]:f2} learnRate {LearnRate} epoch {Epoch} mse = {mse:f2}");
 			}
-			Debug.WriteIf(MeanSquareError >= 100, "NO CONVERGENCE ");
+			Debug.WriteIf(mse >= 100, "NO CONVERGENCE ");
 		}
 		/// <summary>
 		/// Create Neural network with Hidden- and Output neurons.
@@ -72,19 +72,19 @@ namespace NeuralNetwork
 		public double Train(double[] trainData, int maxEpochs, double learnRate)
 		{
 			this.LearnRate = learnRate;
-			MeanSquareError = 1.0;
+			mse = 1.0;
 			Epoch = 0;
 			var idx = 0;
-			while (MeanSquareError > 0.01 && MeanSquareError < 100 && ++Epoch < maxEpochs &&  (Inputs.Length + idx) < trainData.Length)
+			while (mse > 0.01 && mse < 100 && ++Epoch < maxEpochs && (Inputs.Length + idx) < trainData.Length)
 			{
 				this.Inputs = SetInputs(trainData, idx);
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
-				this.MeanSquareError = Math.Abs(ExpectedOutput-Output[0]);
+				this.mse = Math.Abs(ExpectedOutput - Output[0]);
 				BackPropagation(this.ExpectedOutput, learnRate);// Compute gradients and update Weights;
-				//++epoch; //++idx;
+				// ++idx;
 			}
-			return MeanSquareError;
+			return mse;
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace NeuralNetwork
 				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
 				{
 					// see above: hOutputs are inputs to the nn outputs
-					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j]/numInputs;
+					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
 					outputNeurons[k].Weights[j] += delta;
 				}
 			}
