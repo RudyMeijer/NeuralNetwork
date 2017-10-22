@@ -75,14 +75,14 @@ namespace NeuralNetwork
 			mse = 1.0;
 			Epoch = 0;
 			var idx = 0;
-			while (mse > 0.01 && mse < 100 && ++Epoch < maxEpochs && (Inputs.Length + idx) < trainData.Length)
+			while (mse > 0.01 && mse < 100 && ++Epoch < maxEpochs) // for time related datastreams && (Inputs.Length + idx) < trainData.Length)
 			{
 				this.Inputs = SetInputs(trainData, idx);
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
 				this.mse = Math.Abs(ExpectedOutput - Output[0]);
 				BackPropagation(this.ExpectedOutput, learnRate);// Compute gradients and update Weights;
-				// ++idx;
+				//++idx;
 			}
 			return mse;
 		}
@@ -178,6 +178,7 @@ namespace NeuralNetwork
 			for (int i = 0; i < Inputs.Length; i++)
 			{
 				Inputs[i] = trainData[idx + i];
+				if (Inputs[i] == 0) Inputs[i] = 0.01; // Input mogen niet null zijn (delta W = ~)
 			}
 			return Inputs;
 		}

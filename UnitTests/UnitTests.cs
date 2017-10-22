@@ -70,7 +70,7 @@ namespace NeuralNetwork.Tests
 			// Neural network: Single output neuron with ten input.
 			//
 			var nn = new NeuralNetwork(numInputs: 10, numHidden: 0, numOutputs: 1);
-			var mse = nn.Train(trainData: new double[] { 1,2,3,4,5,6,7,8,9,10, 1 }, maxEpochs: 100, learnRate: 1);
+			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1 }, maxEpochs: 100, learnRate: 1);
 			Assert.IsTrue(mse < 0.01 && nn.Epoch == 2, $"Error = {mse} epoch {nn.Epoch}");
 		}
 		[TestMethod()]
@@ -82,6 +82,21 @@ namespace NeuralNetwork.Tests
 			var nn = new NeuralNetwork(numInputs: 1, numHidden: 1, numOutputs: 1);
 			var mse = nn.Train(trainData: new double[] { 1, 1 }, maxEpochs: 100, learnRate: 0.8);
 			Assert.IsTrue(mse < 0.01, $"Error Hidden neuron= {mse:f0}");
+
+		}
+		[TestMethod()]
+		public void TestNandNeuron()
+		{
+			//
+			// Neural network: Nand 2 inputs and 2 hidden neuron.
+			//
+			var nn = new NeuralNetwork(numInputs: 2, numHidden: 2, numOutputs: 1);
+			var mse = 1.0;
+			mse = nn.Train(trainData: new double[] { 0,0,1 }, maxEpochs: 10, learnRate: 0.25);
+			mse = nn.Train(trainData: new double[] { 0,1,1 }, maxEpochs: 10, learnRate: 0.25);
+			mse = nn.Train(trainData: new double[] { 1,0,1 }, maxEpochs: 10, learnRate: 0.25);
+			mse = nn.Train(trainData: new double[] { 1,1,0 }, maxEpochs: 10, learnRate: 0.25);
+			Assert.IsTrue(mse < 0.01, $"Error Nand neuron= {mse:f2}");
 
 		}
 	}
