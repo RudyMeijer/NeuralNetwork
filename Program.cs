@@ -30,27 +30,8 @@ namespace NeuralNetwork
 			trainData = new double[] { 1, 1 }; // Size is numInputs + 1
 
 			nn.Train(trainData, maxEpochs: 100, learnRate: 0.1);
-			ShowNeuralNetwork(nn);
-			Debug.WriteIf(nn.mse >= 100, "NO CONVERGENCE ");
+			nn.ShowNeuralNetwork();
 			Debug.WriteLine("================== Done ==================");
-		}
-
-		public static void ShowNeuralNetwork(NeuralNetwork nn)
-		{
-			// Show input values.
-			if (nn.numHidden == 0)
-				Debug.Write($"Inputs: {nn.outputNeurons[0].Inputs} W = {nn.outputNeurons[0].Weights} ");
-			else
-				Debug.WriteLine($"Inputs: {nn.hiddenNeurons[0].Inputs}");
-			for (int k = 0; k < nn.numOutputs; k++)
-			{
-				for (int j = 0; j < nn.numHidden; j++)
-				{
-					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {nn.Hidden[j],6:f2} * {nn.outputNeurons[k].Weights[j]:f2} hGrad {nn.hGrads[j]:f2}");
-				}
-				//Debug.WriteLine($"Output weights {nn.outputNeurons[k].Weights}");
-				Debug.WriteLine($"Output = {nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} epoch {nn.epoch} mse = {nn.mse:f2}");
-			}
 		}
 
 		/// <summary>

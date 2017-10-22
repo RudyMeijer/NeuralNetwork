@@ -22,6 +22,24 @@ namespace NeuralNetwork
 		public int idx;
 		public double[] oGrads;
 		public double[] hGrads;
+
+		internal void ShowNeuralNetwork()
+		{
+			// Show input values.
+			if (numHidden == 0)
+				Debug.Write($"Inputs: {outputNeurons[0].Inputs} W = {outputNeurons[0].Weights} ");
+			else
+				Debug.WriteLine($"Inputs: {hiddenNeurons[0].Inputs}");
+			for (int k = 0; k < numOutputs; k++)
+			{
+				for (int j = 0; j < numHidden; j++)
+				{
+					Debug.WriteLine($"Weights {hiddenNeurons[j].Weights} output H{j,-2}: {Hidden[j],6:f2} * {outputNeurons[k].Weights[j]:f2} hGrad {hGrads[j]:f2}");
+				}
+				Debug.WriteLine($"Output = {Output[k]:f2} Target = {ExpectedOutput:f2} ograd {oGrads[k]:f2} epoch {epoch} mse = {mse:f2}");
+			}
+			Debug.WriteIf(mse >= 100, "NO CONVERGENCE ");
+		}
 		#endregion
 		/// <summary>
 		/// Create Neural network with Hidden- and Output neurons.
@@ -77,7 +95,7 @@ namespace NeuralNetwork
 		private void BackPropagation(double expectedOutput, double learnRate)
 		{
 			ComputeGradients();
-			Program.ShowNeuralNetwork(this);
+			ShowNeuralNetwork();
 			UpdateWeights(learnRate);
 		}
 
