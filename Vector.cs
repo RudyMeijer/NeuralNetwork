@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Lib
 {
@@ -40,13 +41,9 @@ namespace Lib
 		}
 		public override string ToString()
 		{
-			var s = "";
-			for (int i = 0; i < Length; i++)
-			{
-				//s += ((i == 0) ? "" : ", ") + items[i].ToString("6:f2");
-				s += ((i == 0) ? "" : ", ") + $"{items[i],6:f2}";
-			}
-			return s;
+			var sb = new StringBuilder();
+			for (int i = 0; i < Length; i++) sb.Append($"{items[i],6:f2}");
+			return sb.ToString();
 		}
 	}
 }

@@ -22,9 +22,9 @@ namespace NeuralNetwork
 
 		public double LearnRate { get; private set; }
 
-		//private double[] oLast;
-		public double[] oGrads;
-		public double[] hGrads;
+		public Vector oLast;
+		public Vector oGrads;
+		public Vector hGrads;
 		#endregion
 
 		internal void ShowNeuralNetwork()
@@ -56,6 +56,10 @@ namespace NeuralNetwork
 			outputNeurons.Clear();
 			for (int i = 0; i < numHidden; i++) this.hiddenNeurons.Add(new Neuron(inputs: this.Inputs));
 			for (int i = 0; i < numOutputs; i++) this.outputNeurons.Add(new Neuron(inputs: (numHidden > 0) ? Hidden : Inputs));
+			// Output and hidden Gradients.
+			this.oLast = new Vector(numOutputs);
+			this.oGrads = new Vector(numOutputs);
+			this.hGrads = new Vector(numHidden);
 		}
 		public double Train(double[] trainData, int maxEpochs, double learnRate)
 		{
@@ -127,9 +131,6 @@ namespace NeuralNetwork
 			//
 			// 1. compute output gradients
 			//
-			//oLast  = new Double[numOutputs];
-			oGrads = new Double[numOutputs];
-			hGrads = new Double[numHidden];
 			for (int k = 0; k < numOutputs; ++k)
 			{
 				//For sigmoid activation, the derivative of y = log-sigmoid(x) is y * (1 - y)
@@ -140,7 +141,7 @@ namespace NeuralNetwork
 				// If gradient switches sign then half learningrate.
 				//
 				//if (oGrads[k] * oLast[k] < 0) this.LearnRate /= 2;
-				//oLast[k] = oGrads[k];
+				oLast[k] = oGrads[k];
 			}
 			//
 			// 2. compute hidden gradients
@@ -156,7 +157,7 @@ namespace NeuralNetwork
 					sum += x;
 				}
 				hGrads[j] = derivative * sum;
-				SetRange(-10.0, 10.0, ref hGrads[j]);
+				//SetRange(-10.0, 10.0, ref hGrads[j]);
 			}
 		}
 
