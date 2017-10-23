@@ -46,11 +46,11 @@ namespace NeuralNetwork.Tests
 			// Neural network: Single output neuron with one input.
 			//
 			var nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
-			var mse = nn.Train(trainData: new double[] { 1, 1 }, maxEpochs: 100, learnRate: 1);
+			var mse = nn.Train(trainData: new double[] { 1, .5 }, maxEpochs: 100, learnRate: 10);
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 12, $"Error 1 = {mse} epoch {nn.Epoch}");
 
-			//nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
-			mse = nn.Train(new double[] { 6, 1 }, 100, 1);
+			nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
+			mse = nn.Train(new double[] { 6, 1 }, 100, 10);
 			Assert.IsTrue(mse < 0.01 && nn.Epoch == 1, $"Error 2 = {mse} epoch {nn.Epoch} input 6");
 		}
 		[TestMethod()]
@@ -61,7 +61,7 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 2, numHidden: 0, numOutputs: 1);
 			var mse = nn.Train(trainData: new double[] { 1, 1, 0.5 }, maxEpochs: 100, learnRate: 1);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 7, $"Error = {mse} epoch {nn.Epoch}");
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 8, $"Error = {mse} epoch {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestSingleNeuronTenInputs()
@@ -71,7 +71,7 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 10, numHidden: 0, numOutputs: 1);
 			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0.5 }, maxEpochs: 100, learnRate: 10);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 16, $"Error = {mse} epoch {nn.Epoch}");
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 18, $"Error = {mse} epoch {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestHiddenNeuron()
@@ -80,7 +80,7 @@ namespace NeuralNetwork.Tests
 			// Neural network: Single hidden neuron with one input.
 			//
 			var nn = new NeuralNetwork(numInputs: 1, numHidden: 1, numOutputs: 1);
-			var mse = nn.Train(trainData: new double[] { 1, 1 }, maxEpochs: 100, learnRate: 0.8);
+			var mse = nn.Train(trainData: new double[] { 1, 0.5 }, maxEpochs: 100, learnRate: 1);
 			Assert.IsTrue(mse < 0.01, $"Error Hidden neuron= {mse:f0}");
 
 		}
