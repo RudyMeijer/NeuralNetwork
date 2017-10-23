@@ -140,7 +140,7 @@ namespace NeuralNetwork
 				// 
 				// If gradient switches sign then half learningrate.
 				//
-				//if (oGrads[k] * oLast[k] < 0) this.LearnRate /= 2;
+				if (oGrads[k] * oLast[k] < 0) this.LearnRate /= 2;
 				oLast[k] = oGrads[k];
 			}
 			//
