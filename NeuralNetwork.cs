@@ -22,6 +22,7 @@ namespace NeuralNetwork
 
 		public double LearnRate { get; private set; }
 
+		//private double[] oLast;
 		public double[] oGrads;
 		public double[] hGrads;
 		#endregion
@@ -68,7 +69,7 @@ namespace NeuralNetwork
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
 				this.mse = Math.Abs(ExpectedOutput - Output[0]);
-				BackPropagation(this.ExpectedOutput, learnRate);// Compute gradients and update Weights;
+				BackPropagation(this.ExpectedOutput, this.LearnRate);// Compute gradients and update Weights;
 																//++idx;
 			}
 			return mse;
@@ -126,6 +127,7 @@ namespace NeuralNetwork
 			//
 			// 1. compute output gradients
 			//
+			oLast  = new Double[numOutputs];
 			oGrads = new Double[numOutputs];
 			hGrads = new Double[numHidden];
 			for (int k = 0; k < numOutputs; ++k)
@@ -134,6 +136,11 @@ namespace NeuralNetwork
 				double derivative = 1;// Output[k] * (1 - Output[k]);
 									  // 'mean squared error version' includes (1-y)(y) derivative
 				oGrads[k] = derivative * (ExpectedOutput - Output[k]);
+				// 
+				// If gradient switches sign then half learningrate.
+				//
+				//if (oGrads[k] * oLast[k] < 0) this.LearnRate /= 2;
+				//oLast[k] = oGrads[k];
 			}
 			//
 			// 2. compute hidden gradients
@@ -161,8 +168,8 @@ namespace NeuralNetwork
 
 		private Vector ComputeOutputs()
 		{
-			for (int i = 0; i < numHidden; i++) this.Hidden[i] = hiddenNeurons[i].ExecuteIW();
-			for (int i = 0; i < numOutputs; i++) this.Output[i] = outputNeurons[i].ExecuteIW();
+			for (int i = 0; i < numHidden; i++) this.Hidden[i] = hiddenNeurons[i].Execute();
+			for (int i = 0; i < numOutputs; i++) this.Output[i] = outputNeurons[i].Execute();
 			return Output;
 		}
 
@@ -171,7 +178,7 @@ namespace NeuralNetwork
 			for (int i = 0; i < Inputs.Length; i++)
 			{
 				Inputs[i] = trainData[idx + i];
-				if (Inputs[i] == 0) Inputs[i] = 0.01; // Input mogen niet null zijn (delta W = ~)
+				if (Inputs[i] == 0) Inputs[i] = 0.01; // Inputs mogen niet null zijn (delta W = ~)
 			}
 			return Inputs;
 		}

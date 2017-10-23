@@ -21,7 +21,7 @@ namespace NeuralNetwork
 
 		public double Execute()
 		{
-			return Sigmoid(Inputs * Weights - Bias);
+			return Sigmoid(Inputs * Weights);// - Bias);
 		}
 		public double ExecuteIW()
 		{

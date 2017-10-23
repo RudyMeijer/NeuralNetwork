@@ -92,7 +92,7 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 2, numHidden: 2, numOutputs: 1);
 			var mse = 1.0;
-			mse = nn.Train(trainData: new double[] { 0,0,1 }, maxEpochs: 100, learnRate: 0.25);
+			mse = nn.Train(trainData: new double[] { 0,0,1 }, maxEpochs: 100, learnRate: 1);
 			mse = nn.Train(trainData: new double[] { 0,1,1 }, maxEpochs: 100, learnRate: 0.01);
 			mse = nn.Train(trainData: new double[] { 1,0,1 }, maxEpochs: 100, learnRate: 0.25);
 			mse = nn.Train(trainData: new double[] { 1,1,0 }, maxEpochs: 100, learnRate: 0.25);
