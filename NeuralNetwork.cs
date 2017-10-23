@@ -127,7 +127,7 @@ namespace NeuralNetwork
 			//
 			// 1. compute output gradients
 			//
-			oLast  = new Double[numOutputs];
+			//oLast  = new Double[numOutputs];
 			oGrads = new Double[numOutputs];
 			hGrads = new Double[numHidden];
 			for (int k = 0; k < numOutputs; ++k)
