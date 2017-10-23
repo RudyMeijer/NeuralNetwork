@@ -16,7 +16,7 @@ namespace Lib
 		/// </summary>
 		/// <param name="length"></param>
 		/// <param name="value"></param>
-		public Vector(int length, double defaultValue=0)
+		public Vector(int length, double defaultValue = 0)
 		{
 			items = new double[length];
 			for (int i = 0; i < length; i++) items[i] = defaultValue;
@@ -25,17 +25,20 @@ namespace Lib
 		{
 			items = args;
 		}
-		public static double operator*(Vector v1, Vector v2)
+		public static double operator *(Vector v1, Vector v2)
 		{
 			var dot = 0d;
 			for (int i = 0; i < v1.Length; i++) dot += v1[i] * v2[i];
 			return dot;
 		}
-		public double this[int i] {
-			get {
+		public double this[int i]
+		{
+			get
+			{
 				return items[i];
 			}
-			set {
+			set
+			{
 				items[i] = value;
 			}
 		}
@@ -44,6 +47,11 @@ namespace Lib
 			var sb = new StringBuilder();
 			for (int i = 0; i < Length; i++) sb.Append($"{items[i],6:f2}");
 			return sb.ToString();
+		}
+
+		internal void Clear()
+		{
+			for (int i = 0; i < this.Length; i++) items[i] = 0;
 		}
 	}
 }

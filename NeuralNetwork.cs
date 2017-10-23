@@ -68,6 +68,7 @@ namespace NeuralNetwork
 			this.LearnRate = learnRate;
 			mse = 1.0;
 			Epoch = 0;
+			oLast.Clear();
 			var idx = 0;
 			while (mse > 0.01 && mse < 100 && ++Epoch <= maxEpochs) // for time related datastreams && (Inputs.Length + idx) < trainData.Length)
 			{
