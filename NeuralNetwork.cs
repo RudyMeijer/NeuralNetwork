@@ -18,7 +18,7 @@ namespace NeuralNetwork
 		public List<Neuron> hiddenNeurons = new List<Neuron>();
 		public List<Neuron> outputNeurons = new List<Neuron>();
 		public double mse { get; private set; }
-		public int Epoch { get; private set; }
+		public int Epoch { get;  set; }
 
 		public double LearnRate { get; private set; }
 
@@ -44,6 +44,8 @@ namespace NeuralNetwork
 			}
 			Debug.WriteIf(mse >= 100, "NO CONVERGENCE ");
 		}
+		public NeuralNetwork()
+		{ }
 		public NeuralNetwork(int numInputs, int numHidden, int numOutputs)
 		{
 			this.numInputs = numInputs;
