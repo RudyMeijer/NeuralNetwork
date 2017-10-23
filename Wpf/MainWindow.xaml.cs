@@ -39,7 +39,7 @@ namespace Wpf
 		{
 			NumInputs++;
 			//txtNumInputs.Text = NumInputs.ToString();
-			//var nn = new NeuralNetwork.NeuralNetwork(NumInputs, NumHidden, NumOutputs);
+			var nn = new NeuralNetwork.NeuralNetwork(NumInputs, NumHidden, NumOutputs);
 		}
 
 		private void button_Click(object sender, RoutedEventArgs e)

@@ -15,19 +15,19 @@
         <local1:NeuralNetwork x:Key="myDataSource" Epoch="33" />
 
     </Window.Resources>
-    <StackPanel Margin="20,10,13.4,14.8" >
-        <Button x:Name="btnStart" Content="Start"  Click="btnStart_Click" Width="50" HorizontalAlignment="Left" Margin="0"/>
-        <Button x:Name="button_Copy" Content="Show binding"  Click="button_Click" Height="19" Width="50" Margin="0,0,191,0" HorizontalAlignment="Left" />
+    <Grid>
+        <Button x:Name="btnStart" Content="Start"  Click="btnStart_Click" Width="67" HorizontalAlignment="Left" Margin="110,195,0,69.8" Background="#FF0BF116"/>
+        <Button x:Name="button_Copy" Content="Show binding"  Click="button_Click" Width="94" Margin="414,283,0,9.8" HorizontalAlignment="Left" />
         <StackPanel Height="69" Margin="76,0,0,0" HorizontalAlignment="Left" Width="101">
             <WrapPanel Height="68" Margin="0,0,0.2,0">
                 <TextBlock Text="Inputs   "/>
                 <TextBox x:Name="txtNumInputs" Text="{Binding NumInputs, BindsDirectlyToSource=True, Mode=TwoWay, NotifyOnSourceUpdated=True, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
-                <TextBlock Text="Hidden  "/>
+                <TextBlock Text="Hidden "/>
                 <TextBox x:Name="txtNumHidden" Text="{Binding NumHidden, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Width="50"/>
                 <TextBlock Text="Outputs"/>
                 <TextBox x:Name="txtNumOutputs" Text="{Binding NumOutputs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Width="50"/>
             </WrapPanel>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 
 </Window>
