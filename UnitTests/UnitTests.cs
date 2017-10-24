@@ -59,11 +59,11 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
 			var mse = nn.Train(trainData: new double[] { 1, .5 }, maxEpochs: 100, learnRate: 10);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 12, $"Error 1 = {mse} epoch {nn.Epoch}");
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 12, $"Error 1 = {mse} epoch 12 -> {nn.Epoch}");
 
 			nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
 			mse = nn.Train(new double[] { 6, 1 }, 100, 10);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch == 1, $"Error 2 = {mse} epoch {nn.Epoch} input 6");
+			Assert.IsTrue(mse < 0.01 && nn.Epoch == 1, $"Error 2 = {mse} epoch 1 -> {nn.Epoch} input 6");
 		}
 		[TestMethod()]
 		public void TestSingleNeuronTwoInputs()
@@ -73,7 +73,7 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 2, numHidden: 0, numOutputs: 1);
 			var mse = nn.Train(trainData: new double[] { 1, 1, 0.5 }, maxEpochs: 100, learnRate: 1);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 8, $"Error = {mse} epoch {nn.Epoch}");
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 8, $"Error = {mse} epoch 8 -> {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestSingleNeuronTenInputs()
@@ -83,7 +83,7 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 10, numHidden: 0, numOutputs: 1);
 			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0.5 }, maxEpochs: 100, learnRate: 10);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 18, $"Error = {mse} epoch {nn.Epoch}");
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 18, $"Error = {mse} epoch 18 -> {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestHiddenNeuron()
@@ -104,18 +104,23 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 2, numHidden: 2, numOutputs: 1);
 			var mse = 1.0;
-			mse = nn.Train(trainData: new double[] { 0, 0, .5 }, maxEpochs: 100, learnRate: 1);
-			mse = nn.Train(trainData: new double[] { 0, 1, .5 }, maxEpochs: 100, learnRate: 1);
-			mse = nn.Train(trainData: new double[] { 1, 0, .5 }, maxEpochs: 100, learnRate: 1);
+			mse = nn.Train(trainData: new double[] { 0, 0, 1 }, maxEpochs: 100, learnRate: 1);
+			mse = nn.Train(trainData: new double[] { 0, 1, 1 }, maxEpochs: 100, learnRate: 1);
+			mse = nn.Train(trainData: new double[] { 1, 0, 1 }, maxEpochs: 100, learnRate: 1);
 			mse = nn.Train(trainData: new double[] { 1, 1, 0 }, maxEpochs: 100, learnRate: 1);
 			Assert.IsTrue(mse < 0.01, $"Error Nand neuron= {mse:f2}");
 			//
-			// Now Compute outputs for a given input combination.
+			Debug.WriteLine("=== Now Compute outputs for a given input combination. ===");
 			//
-			nn.Inputs = new Vector(1d,1);
+			nn.Inputs = new Vector(1d, 1d);
 			var output = nn.ComputeOutputs()[0];
 			Program.ShowNeuralNetwork(nn);
-			Assert.IsTrue(output < 0.1, $"Nand 0 0 = {output}");
+			Assert.IsTrue(output < 0.1, $"Nand 1 1 = {output}");
+
+			nn.Inputs = new Vector(1d, 0.01d);
+			output = nn.ComputeOutputs()[0];
+			Program.ShowNeuralNetwork(nn);
+			Assert.IsTrue(output > 0.9, $"Nand {nn.Inputs} = {output}");
 		}
 		[TestMethod()]
 		public void TestSigmoidInverse()

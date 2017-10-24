@@ -13,7 +13,7 @@ namespace NeuralNetwork
 		public int numOutputs;
 		/// <summary>
 		/// Next two properties must be readonly!
-		/// Because all constructed neurons have reference to these input properties.
+		/// Because all constructed neurons have a reference to these input properties.
 		/// Therefore you can't change reference by Inputs = new Vector(...)
 		/// Use SetInputs methode instead. Which assign vectoritems directly by Inputs[0] = ...
 		/// </summary>
@@ -21,7 +21,7 @@ namespace NeuralNetwork
 
 		public Vector Inputs
 		{
-			get { return inputs; }
+			get => inputs;
 			set { for (int i = 0; i < inputs.Length; i++) inputs[i] = value[i]; }
 		}
 
