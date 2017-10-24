@@ -11,14 +11,27 @@ namespace NeuralNetwork
 		public int numInputs;
 		public int numHidden;
 		public int numOutputs;
-		public Vector Inputs;
-		public Vector Hidden;
+		/// <summary>
+		/// Next two properties must be readonly!
+		/// Because all constructed neurons have reference to these input properties.
+		/// Therefore you can't change reference by Inputs = new Vector(...)
+		/// Use SetInputs methode instead. Which assign vectoritems directly by Inputs[0] = ...
+		/// </summary>
+		private Vector inputs;
+
+		public Vector Inputs
+		{
+			get { return inputs; }
+			set { for (int i = 0; i < inputs.Length; i++) inputs[i] = value[i]; }
+		}
+
+		public Vector Hidden { get; }
 		public Vector Output;
 		public double ExpectedOutput;
 		public List<Neuron> hiddenNeurons = new List<Neuron>();
 		public List<Neuron> outputNeurons = new List<Neuron>();
 		public double mse { get; private set; }
-		public int Epoch { get;  set; }
+		public int Epoch { get; set; }
 
 		public double LearnRate { get; private set; }
 
@@ -27,20 +40,18 @@ namespace NeuralNetwork
 		public Vector hGrads;
 		#endregion
 
-		public NeuralNetwork()
-		{ }
 		public NeuralNetwork(int numInputs, int numHidden, int numOutputs)
 		{
 			this.numInputs = numInputs;
 			this.numHidden = numHidden;
 			this.numOutputs = numOutputs;
-			this.Inputs = new Vector(numInputs);
+			this.inputs = new Vector(numInputs);
 			this.Hidden = new Vector(numHidden);
 			this.Output = new Vector(numOutputs);
 			hiddenNeurons.Clear();
 			outputNeurons.Clear();
 			for (int i = 0; i < numHidden; i++) this.hiddenNeurons.Add(new Neuron(inputs: this.Inputs));
-			for (int i = 0; i < numOutputs; i++) this.outputNeurons.Add(new Neuron(inputs: (numHidden > 0) ? Hidden : Inputs));
+			for (int i = 0; i < numOutputs; i++) this.outputNeurons.Add(new Neuron(inputs: (numHidden == 0) ? Inputs : Hidden));
 			// Output and hidden Gradients.
 			this.oLast = new Vector(numOutputs);
 			this.oGrads = new Vector(numOutputs);
@@ -55,12 +66,12 @@ namespace NeuralNetwork
 			var idx = 0;
 			while (mse > 0.01 && mse < 100 && ++Epoch <= maxEpochs) // for time related datastreams && (Inputs.Length + idx) < trainData.Length)
 			{
-				this.Inputs = SetInputs(trainData, idx);
+				SetInputs(trainData, idx);
 				this.ExpectedOutput = trainData[numInputs + idx];
 				ComputeOutputs();
 				this.mse = Math.Abs(ExpectedOutput - Output[0]);
 				BackPropagation(this.ExpectedOutput, this.LearnRate);// Compute gradients and update Weights;
-																//++idx;
+																	 //++idx;
 			}
 			return mse;
 		}
@@ -152,15 +163,14 @@ namespace NeuralNetwork
 			if (v3 < min) v3 = min;
 			if (v3 > max) v3 = max;
 		}
-
-		private Vector ComputeOutputs()
+		public Vector ComputeOutputs()
 		{
 			for (int i = 0; i < numHidden; i++) this.Hidden[i] = hiddenNeurons[i].Execute();
 			for (int i = 0; i < numOutputs; i++) this.Output[i] = outputNeurons[i].Execute();
 			return Output;
 		}
 
-		private Vector SetInputs(double[] trainData, int idx)
+		public Vector SetInputs(double[] trainData, int idx)
 		{
 			for (int i = 0; i < Inputs.Length; i++)
 			{

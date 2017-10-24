@@ -28,7 +28,7 @@ namespace NeuralNetwork
 			return Inputs * Weights;
 		}
 
-		double Sigmoid(double z)
+		public double Sigmoid(double z)
 		{
 			return 1 / (1 + Math.Exp(-8*z));
 		}

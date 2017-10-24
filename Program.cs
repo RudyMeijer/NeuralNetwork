@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-	class Program
+	public class Program
 	{
 		static void Main(string[] args)
 		{
@@ -46,11 +46,11 @@ namespace NeuralNetwork
 				{
 					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {SigmoidInv(nn.Hidden[j]),6:f2}/{nn.Hidden[j],5:f2} * {nn.outputNeurons[k].Weights[j]:f2} hGrad {nn.hGrads[j]:f2}");
 				}
-				Debug.WriteLine($"Output{k} = {nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} learnRate {nn.LearnRate} epoch {nn.Epoch} mse = {nn.mse:f2}");
+				Debug.WriteLine($"Output{k} = {SigmoidInv( nn.Output[k]):f2}/{nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} learnRate {nn.LearnRate} epoch {nn.Epoch} mse = {nn.mse:f2}");
 			}
 			Debug.WriteIf(nn.mse >= 100, "NO CONVERGENCE ");
 		}
-		static double SigmoidInv(double x)
+		public static double SigmoidInv(double x)
 		{
 			return -Math.Log(1 / x - 1) / 8;
 		}
