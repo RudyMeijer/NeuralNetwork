@@ -36,8 +36,12 @@ namespace NeuralNetwork.Tests
 			// Test if input neuron is connected to output neuron when no hidden layer.
 			//
 			nn = new NeuralNetwork(4, 0, 2);
-			nn.Inputs[3] = 123; // set input to arbitrary value.
-			Assert.IsTrue(nn.Inputs[3] == nn.outputNeurons[1].Inputs[3], $"Input neuron not connected to output neuron when no hidden layer.");
+			nn.Inputs[0] = 123; // set input to arbitrary value.
+			nn.Inputs[3] = 234; // set input to arbitrary value.
+			Assert.IsTrue(123 == nn.outputNeurons[0].Inputs[0], $"Input 0 neuron not connected to output neuron 0 when no hidden layer.");
+			Assert.IsTrue(123 == nn.outputNeurons[1].Inputs[0], $"Input 0 neuron not connected to output neuron 1 when no hidden layer.");
+			Assert.IsTrue(234 == nn.outputNeurons[0].Inputs[3], $"Input 3 neuron not connected to output neuron 0 when no hidden layer.");
+			Assert.IsTrue(234 == nn.outputNeurons[1].Inputs[3], $"Input 3 neuron not connected to output neuron 1 when no hidden layer.");
 		}
 		[TestMethod()]
 		public void TestSingleNeuron()
