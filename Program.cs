@@ -10,6 +10,8 @@ namespace NeuralNetwork
 {
 	public class Program
 	{
+		public static bool DEBUG = true;
+
 		static void Main(string[] args)
 		{
 			var numInputs = 1; // Equal to rolling window size.
@@ -35,6 +37,7 @@ namespace NeuralNetwork
 		}
 		public static void ShowNeuralNetwork(NeuralNetwork nn)
 		{
+			if (!DEBUG) return;
 			// Show input values.
 			if (nn.numHidden == 0)
 				Debug.Write($"Inputs: {nn.outputNeurons[0].Inputs} W = {nn.outputNeurons[0].Weights} ");
@@ -54,7 +57,6 @@ namespace NeuralNetwork
 		{
 			return -Math.Log(1 / x - 1) / 8;
 		}
-
 
 		/// <summary>
 		/// Normalize data by computing (x - mean) / standard deviation for each value.

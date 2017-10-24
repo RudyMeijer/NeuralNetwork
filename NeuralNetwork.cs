@@ -71,7 +71,7 @@ namespace NeuralNetwork
 				ComputeOutputs();
 				this.mse = Math.Abs(ExpectedOutput - Output[0]);
 				BackPropagation(this.ExpectedOutput, this.LearnRate);// Compute gradients and update Weights;
-																	 //++idx;
+				//idx += 3; if (idx >= trainData.Length) idx = 0;
 			}
 			return mse;
 		}
@@ -118,6 +118,7 @@ namespace NeuralNetwork
 					// see above: hOutputs are inputs to the nn outputs
 					// Divide output gradients over all inputs.
 					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
+					//double delta = learnRate * oGrads[k] * outputNeurons[k].Inputs[j];
 					outputNeurons[k].Weights[j] += delta;
 				}
 			}

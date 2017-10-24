@@ -82,8 +82,8 @@ namespace NeuralNetwork.Tests
 			// Neural network: Single output neuron with ten input.
 			//
 			var nn = new NeuralNetwork(numInputs: 10, numHidden: 0, numOutputs: 1);
-			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0.5 }, maxEpochs: 100, learnRate: 10);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 18, $"Error = {mse} epoch 18 -> {nn.Epoch}");
+			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, -10, 0.5 }, maxEpochs: 100, learnRate: 10);
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 18, $"Error = {mse:f2} epoch 18 -> {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestHiddenNeuron()
@@ -104,20 +104,25 @@ namespace NeuralNetwork.Tests
 			//
 			var nn = new NeuralNetwork(numInputs: 2, numHidden: 2, numOutputs: 1);
 			var mse = 1.0;
-			mse = nn.Train(trainData: new double[] { 0, 0, 1 }, maxEpochs: 100, learnRate: 1);
-			mse = nn.Train(trainData: new double[] { 0, 1, 1 }, maxEpochs: 100, learnRate: 1);
-			mse = nn.Train(trainData: new double[] { 1, 0, 1 }, maxEpochs: 100, learnRate: 1);
-			mse = nn.Train(trainData: new double[] { 1, 1, 0 }, maxEpochs: 100, learnRate: 1);
+			//Program.DEBUG = false;
+			//mse = nn.Train(trainData: new double[] { 0, 0, 1 }, maxEpochs: 100, learnRate: 1);
+			//mse = nn.Train(trainData: new double[] { 0, 1, 1 }, maxEpochs: 100, learnRate: 1);
+			//mse = nn.Train(trainData: new double[] { 1, 0, 1 }, maxEpochs: 100, learnRate: 1);
+			//mse = nn.Train(trainData: new double[] { 1, 1, 0 }, maxEpochs: 100, learnRate: 1);
+			mse = nn.Train(trainData: new double[] { 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 }, maxEpochs: 100, learnRate: 1);
 			Assert.IsTrue(mse < 0.01, $"Error Nand neuron= {mse:f2}");
 			//
 			Debug.WriteLine("=== Now Compute outputs for a given input combination. ===");
 			//
 			nn.Inputs = new Vector(1d, 1d);
+			nn.ExpectedOutput = 0;
 			var output = nn.ComputeOutputs()[0];
+			Program.DEBUG = true;
 			Program.ShowNeuralNetwork(nn);
 			Assert.IsTrue(output < 0.1, $"Nand 1 1 = {output}");
 
 			nn.Inputs = new Vector(1d, 0.01d);
+			nn.ExpectedOutput = 1;
 			output = nn.ComputeOutputs()[0];
 			Program.ShowNeuralNetwork(nn);
 			Assert.IsTrue(output > 0.9, $"Nand {nn.Inputs} = {output}");
