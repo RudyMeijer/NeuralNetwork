@@ -19,19 +19,8 @@ namespace NeuralNetwork
 			for (int i = 0; i < Inputs.Length; i++) this.Weights[i] = random.NextDouble();
 		}
 
-		public double Execute()
-		{
-			return Sigmoid(Inputs * Weights);// - Bias);
-		}
-		public double ExecuteIW()
-		{
-			return Inputs * Weights;
-		}
+		public double Execute() => Sigmoid(Inputs * Weights);// - Bias);
 
-		public double Sigmoid(double z)
-		{
-			return 1 / (1 + Math.Exp(-8*z));
-		}
-
+		public double Sigmoid(double z) => 1 / (1 + Math.Exp(-8 * z));
 	}
 }
