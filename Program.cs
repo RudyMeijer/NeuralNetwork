@@ -47,15 +47,11 @@ namespace NeuralNetwork
 			{
 				for (int j = 0; j < nn.numHidden; j++)
 				{
-					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {SigmoidInv(nn.Hidden[j]),6:f2}/{nn.Hidden[j],5:f2} * {nn.outputNeurons[k].Weights[j]:f2} hGrad {nn.hGrads[j]:f2}");
+					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {Neuron.SigmoidInv(nn.Hidden[j]),6:f2}/{nn.Hidden[j],5:f2} * {nn.outputNeurons[k].Weights[j]:f2} hGrad {nn.hGrads[j]:f2}");
 				}
-				Debug.WriteLine($"Output{k} = {SigmoidInv( nn.Output[k]):f2}/{nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} learnRate {nn.LearnRate} epoch {nn.Epoch} mse = {nn.mse:f2}");
+				Debug.WriteLine($"Output{k} = {Neuron.SigmoidInv( nn.Output[k]):f2}/{nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} learnRate {nn.LearnRate} epoch {nn.Epoch} mse = {nn.mse:f2}");
 			}
 			Debug.WriteIf(nn.mse >= 100, "NO CONVERGENCE ");
-		}
-		public static double SigmoidInv(double x)
-		{
-			return -Math.Log(1 / x - 1) / 8;
 		}
 
 		/// <summary>
