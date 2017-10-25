@@ -13,10 +13,6 @@ namespace NeuralNetwork.Tests
 	[TestClass()]
 	public class NeuralNetworkTests
 	{
-		//private int numInputs = 4;
-		//private int numHidden = 5;
-		//private int numOutputs = 6;
-
 		[TestMethod()]
 		public void TestNeuralNetworkTopology()
 		{
@@ -82,7 +78,7 @@ namespace NeuralNetwork.Tests
 			// Neural network: Single output neuron with ten input.
 			//
 			var nn = new NeuralNetwork(numInputs: 10, numHidden: 0, numOutputs: 1);
-			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, -10, 0.5 }, maxEpochs: 100, learnRate: 10);
+			var mse = nn.Train(trainData: new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, -10, 0.5 }, maxEpochs: 100, learnRate: 1);
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 18, $"Error = {mse:f2} epoch 18 -> {nn.Epoch}");
 		}
 		[TestMethod()]
@@ -102,14 +98,14 @@ namespace NeuralNetwork.Tests
 			//
 			// Neural network: Nand 2 inputs and 2 hidden neuron.
 			//
-			var nn = new NeuralNetwork(numInputs: 2, numHidden: 2, numOutputs: 1);
+			var nn = new NeuralNetwork(numInputs: 2, numHidden: 0, numOutputs: 1);
 			var mse = 1.0;
 			Program.DEBUG = false;
 			mse = nn.Train(trainData: new double[] { 0, 0, 1 }, maxEpochs: 100, learnRate: 1);
 			mse = nn.Train(trainData: new double[] { 0, 1, 1 }, maxEpochs: 100, learnRate: 1);
 			mse = nn.Train(trainData: new double[] { 1, 0, 1 }, maxEpochs: 100, learnRate: 1);
 			Program.DEBUG = true;
-			mse = nn.Train(trainData: new double[] { 1, 1, 0 }, maxEpochs: 100, learnRate: 1);
+			mse = nn.Train(trainData: new double[] { 1, 1, 0.5 }, maxEpochs: 100, learnRate: 1);
 			Assert.IsTrue(mse < 0.01, $"Error Nand neuron= {mse:f2}");
 			//
 			Debug.WriteLine("=== Now Compute outputs for a given input combination. ===");
@@ -125,9 +121,7 @@ namespace NeuralNetwork.Tests
 			Program.ShowNeuralNetwork(nn);
 			//Assert.IsTrue(output > 0.9, $"Nand {nn.Inputs} = {output}");
 		}
-
 		private bool InRange(double output, double target, double error) => (output >= target-error && output <= target+error);
-
 		[TestMethod()]
 		public void TestSigmoidInverse()
 		{
