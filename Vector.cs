@@ -31,6 +31,13 @@ namespace Lib
 			for (int i = 0; i < v1.Length; i++) dot += v1[i] * v2[i];
 			return dot;
 		}
+		public static Vector operator /(Double dot, Vector v1)
+		{
+			var prod = dot / v1.Length;
+			Vector v2 = new Vector(v1.Length);
+			for (int i = 0; i < v1.Length; i++) v2[i] = prod / v1[i];
+			return v2;
+		}
 		public double this[int i]
 		{
 			get

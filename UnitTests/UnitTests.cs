@@ -43,7 +43,7 @@ namespace NeuralNetwork.Tests
 			//
 			// Check if Internal input of a single neuron equals input neuron.
 			//
-			nn.Inputs = new Vector(111, 222, 3, 4 );
+			nn.Inputs = new Vector(111, 222, 3, 4);
 			var inp = nn.outputNeurons[0].Inputs[0];
 			Assert.IsTrue(inp == 111, $"Internal input of a single neuron not equal to input neural network.");
 		}
@@ -113,7 +113,7 @@ namespace NeuralNetwork.Tests
 			nn.Inputs = new Vector(1d, 1d);
 			var output = nn.ComputeOutputs()[0];
 			Program.ShowNeuralNetwork(nn);
-			Assert.IsTrue(InRange(output,nn.ExpectedOutput,0.01), $"Nand 1 1 = {output}");
+			Assert.IsTrue(InRange(output, nn.ExpectedOutput, 0.01), $"Nand 1 1 = {output}");
 
 			nn.Inputs = new Vector(1d, 0.01d);
 			nn.ExpectedOutput = 1;
@@ -121,7 +121,7 @@ namespace NeuralNetwork.Tests
 			Program.ShowNeuralNetwork(nn);
 			//Assert.IsTrue(output > 0.9, $"Nand {nn.Inputs} = {output}");
 		}
-		private bool InRange(double output, double target, double error) => (output >= target-error && output <= target+error);
+		private bool InRange(double output, double target, double error) => (output >= target - error && output <= target + error);
 		//[TestMethod()]
 		//public void TestSigmoidInverse()
 		//{
