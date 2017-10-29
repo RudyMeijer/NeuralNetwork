@@ -149,5 +149,20 @@ namespace NeuralNetwork.Tests
 				Debug.WriteLine($"i={i,2} TanH={Math.Tanh(i):f3} TanH(TanH)={Math.Tanh(Math.Tanh(i)):f3}");
 			}
 		}
+		[TestMethod]
+		public void TestTrain()
+		{
+			var nn = new NeuralNetwork(1, 0, 1);
+			nn.Train(new double[] { 1, 0.001 }, maxEpochs: 1, learnRate: 1);
+
+			Assert.IsTrue(nn.ExpectedOutput == 0.001, $"Expected output must be 0.001 {nn.ExpectedOutput}");
+			Assert.IsTrue(nn.LearnRate == 1, $"LearningRate {nn.LearnRate}");
+			Assert.IsTrue(nn.outputNeurons[0].Inputs[0] == 1, $"Input must be 1 {nn.outputNeurons[0].Inputs[0]}");
+			Assert.IsTrue(nn.Output[0] > 0, $"Output must be greater than 0 {nn.Output[0]}");
+			Assert.IsTrue(nn.Epoch == 2, $"Epoch must be 2 {nn.Epoch}");
+			Assert.IsTrue(nn.mse > 0, $"mse must be |target - output| {nn.mse}");
+			Assert.IsTrue(nn.oGrads[0] < 0, $"output gradient must be less than 0 {nn.oGrads[0]}");
+			Assert.IsTrue(nn.oLast[0] == nn.oGrads[0], $"output gradient must be equal to last gradient {nn.oLast[0]}");
+		}
 	}
 }

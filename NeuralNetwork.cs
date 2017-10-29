@@ -139,7 +139,7 @@ namespace NeuralNetwork
 				// 
 				// If gradient switches sign then half learningrate.
 				//
-				if (Math.Sign(oGrads[k]) != Math.Sign(oLast[k])) this.LearnRate /= 2;
+				if (oLast[k]!=0 && Math.Sign(oGrads[k]) != Math.Sign(oLast[k])) this.LearnRate /= 2;
 				oLast[k] = oGrads[k];
 			}
 			//
@@ -156,7 +156,6 @@ namespace NeuralNetwork
 					sum += x;
 				}
 				hGrads[j] = derivative * sum;
-				//SetRange(-10.0, 10.0, ref hGrads[j]);
 			}
 		}
 
