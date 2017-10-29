@@ -71,7 +71,7 @@ namespace NeuralNetwork
 				ComputeOutputs();
 				this.mse = Math.Abs(ExpectedOutput - Output[0]);
 				BackPropagation(this.ExpectedOutput, this.LearnRate);// Compute gradients and update Weights;
-				//idx += 1; //if (idx >= trainData.Length) idx = 0;
+																	 //idx += 1; //if (idx >= trainData.Length) idx = 0;
 			}
 			return mse;
 		}
@@ -103,13 +103,14 @@ namespace NeuralNetwork
 					hiddenNeurons[j].Weights[i] += delta; // update. note we use '+' instead of '-'. this can be very tricky.
 				}
 			}
-
+			#region BIAS
 			// 3b. update hidden biases
 			for (int j = 0; j < numHidden; ++j)
 			{
 				double delta = learnRate * hGrads[j] * 1.0; // t1.0 is constant input for bias; could leave out
 				hiddenNeurons[j].Bias += delta;
 			}
+			#endregion
 			// 4. update output weights
 			for (int k = 0; k < numOutputs; ++k)
 			{
@@ -118,7 +119,7 @@ namespace NeuralNetwork
 					// see above: hOutputs are inputs to the nn outputs
 					// Divide output gradients over all inputs.
 					//double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
-					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j];
+					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs.Length;
 					outputNeurons[k].Weights[j] += delta;
 				}
 			}
@@ -138,7 +139,7 @@ namespace NeuralNetwork
 				// 
 				// If gradient switches sign then half learningrate.
 				//
-				if (oGrads[k] * oLast[k] < 0) this.LearnRate /= 2;
+				if (Math.Sign(oGrads[k]) != Math.Sign(oLast[k])) this.LearnRate /= 2;
 				oLast[k] = oGrads[k];
 			}
 			//
