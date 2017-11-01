@@ -87,7 +87,7 @@ namespace NeuralNetwork
 		{
 			ComputeGradients();
 			Program.ShowNeuralNetwork(this);
-			UpdateWeights(learnRate);
+			UpdateWeights(this.LearnRate);
 		}
 
 		private void UpdateWeights(double learnRate)
@@ -116,7 +116,6 @@ namespace NeuralNetwork
 			{
 				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
 				{
-					// see above: hOutputs are inputs to the nn outputs
 					// Divide output gradients over all inputs.
 					//double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
 					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs.Length;
@@ -139,7 +138,7 @@ namespace NeuralNetwork
 				// 
 				// If gradient switches sign then half learningrate.
 				//
-				if (oLast[k]!=0 && Math.Sign(oGrads[k]) != Math.Sign(oLast[k])) this.LearnRate /= 2;
+				if (oGrads[k] * oLast[k] < 0) this.LearnRate /= 2;
 				oLast[k] = oGrads[k];
 			}
 			//

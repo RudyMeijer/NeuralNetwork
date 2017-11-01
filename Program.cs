@@ -14,10 +14,7 @@ namespace NeuralNetwork
 
 		static void Main(string[] args)
 		{
-			var numInputs = 1; // Equal to rolling window size.
-			var numHidden = 2;
-			var numOutputs = 1;
-			var nn = new NeuralNetwork(numInputs, numHidden, numOutputs);
+			var nn = new NeuralNetwork(numInputs: 1, numHidden: 2, numOutputs: 1);
 			//
 			// Get the training data from a textfile.
 			//
@@ -40,16 +37,16 @@ namespace NeuralNetwork
 			if (!DEBUG) return;
 			// Show input values.
 			if (nn.numHidden == 0)
-				Debug.Write($"Inputs: {nn.outputNeurons[0].Inputs} W = {nn.outputNeurons[0].Weights} ");
+				Debug.Write($"epoch {nn.Epoch} Inputs: {nn.outputNeurons[0].Inputs} W = {nn.outputNeurons[0].Weights} ");
 			else
-				Debug.WriteLine($"Inputs: {nn.hiddenNeurons[0].Inputs}");
+				Debug.WriteLine($"epoch {nn.Epoch} Inputs: {nn.hiddenNeurons[0].Inputs}");
 			for (int k = 0; k < nn.numOutputs; k++)
 			{
 				for (int j = 0; j < nn.numHidden; j++)
 				{
 					Debug.WriteLine($"Weights {nn.hiddenNeurons[j].Weights} output H{j,-2}: {nn.hiddenNeurons[j].ExecuteIW(),6:f2}/{nn.Hidden[j],5:f2} * {nn.outputNeurons[k].Weights[j]:f2} hGrad {nn.hGrads[j]:f2}");
 				}
-				Debug.WriteLine($"Output{k} = {nn.outputNeurons[k].ExecuteIW():f2}/{nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} learnRate {nn.LearnRate} epoch {nn.Epoch} mse = {nn.mse:f2}");
+				Debug.WriteLine($"Output{k} = {nn.outputNeurons[k].ExecuteIW():f2}/{nn.Output[k]:f2} Target = {nn.ExpectedOutput:f2} ograd {nn.oGrads[k]:f2} learnRate {nn.LearnRate} mse = {nn.mse:f2}");
 			}
 			Debug.WriteIf(nn.mse >= 100, "NO CONVERGENCE ");
 		}
