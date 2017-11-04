@@ -62,7 +62,7 @@ namespace NeuralNetwork.Tests
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 20, $"Error 6 = {mse} epoch 1 -> {nn.Epoch}");
 		}
 		[TestMethod()]
-		public void TestSingleNeuronTwoInputs()
+		public void Test2InputsSingleNeuron()
 		{
 			//
 			// Neural network: Single output neuron with two input.
@@ -72,7 +72,7 @@ namespace NeuralNetwork.Tests
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 8, $"Error = {mse} epoch 8 -> {nn.Epoch}");
 		}
 		[TestMethod()]
-		public void TestTenInputsSingleNeuron()
+		public void Test10InputsSingleNeuron()
 		{
 			//
 			// Neural network: Single output neuron with ten input.
