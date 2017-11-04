@@ -66,8 +66,8 @@ namespace NeuralNetwork
             var idx = 0;
             while (mse > 0.01 && mse < 100 && ++Epoch <= maxEpochs) // && (Inputs.Length + idx) < trainData.Length) // for time related datastreams
             {
-                SetInputs(trainData, idx);
-                this.ExpectedOutput = trainData[numInputs + idx];
+                //SetInputs(trainData, idx);
+                //this.ExpectedOutput = trainData[numInputs + idx];
                 ComputeOutputs();
                 this.mse = Math.Abs(ExpectedOutput - Output[0]);
                 BackPropagation(this.ExpectedOutput, this.LearnRate);// Compute gradients and update Weights;
