@@ -16,7 +16,7 @@ namespace NeuralNetwork
 			this.Inputs = inputs;
 			this.Weights = new Vector(Inputs.Length);
 			this.Bias = random.NextDouble();
-			for (int i = 0; i < Inputs.Length; i++) this.Weights[i] = random.NextDouble();
+			for (int i = 0; i < Inputs.Length; i++) this.Weights[i] = random.NextDouble()/10;
 		}
 
 		public double Execute() => Sigmoid(Inputs * Weights);// - Bias);

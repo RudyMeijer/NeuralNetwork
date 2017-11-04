@@ -58,8 +58,8 @@ namespace NeuralNetwork.Tests
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 12, $"Error 1 = {mse} epoch 12 -> {nn.Epoch}");
 
 			nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
-			mse = nn.Train(new double[] { 6, .1 }, 100, 1);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch == 1, $"Error 2 = {mse} epoch 1 -> {nn.Epoch} input 6");
+			mse = nn.Train(new double[] { 6, .1 }, 100, 0.1);
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 20, $"Error 6 = {mse} epoch 1 -> {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestSingleNeuronTwoInputs()
@@ -72,7 +72,7 @@ namespace NeuralNetwork.Tests
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 8, $"Error = {mse} epoch 8 -> {nn.Epoch}");
 		}
 		[TestMethod()]
-		public void TestSingleNeuronTenInputs()
+		public void TestTenInputsSingleNeuron()
 		{
 			//
 			// Neural network: Single output neuron with ten input.
