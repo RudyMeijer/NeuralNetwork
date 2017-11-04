@@ -22,8 +22,5 @@ namespace NeuralNetwork
 		public double Execute() => Sigmoid(Inputs * Weights);// - Bias);
 		public double ExecuteIW() => (Inputs * Weights);
 		public double Sigmoid(double z) => 1 / (1 + Math.Exp(-8 * z));
-		//public static double SigmoidInv(double z) => -Math.Log(1 / z - 1) / 8; // Used for display only.
-
-		//private static double ATanh(double z) => (Math.Log(1 + z) - Math.Log(1 - z)) / 2;
 	}
 }
