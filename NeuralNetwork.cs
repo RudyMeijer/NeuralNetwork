@@ -89,41 +89,6 @@ namespace NeuralNetwork
 			Program.ShowNeuralNetwork(this);
 			UpdateWeights(this.LearnRate);
 		}
-
-		private void UpdateWeights(double learnRate)
-		{
-
-			// 3a. update hidden weights (gradients must be computed right-to-left but weights
-			// can be updated in any order)
-			for (int j = 0; j < numHidden; ++j)
-			{
-				for (int i = 0; i < numInputs; ++i)
-				{
-					double delta = learnRate * hGrads[j] * hiddenNeurons[j].Inputs[i]; // compute the new delta
-					hiddenNeurons[j].Weights[i] += delta; // update. note we use '+' instead of '-'. this can be very tricky.
-				}
-			}
-			#region BIAS
-			// 3b. update hidden biases
-			for (int j = 0; j < numHidden; ++j)
-			{
-				double delta = learnRate * hGrads[j] * 1.0; // t1.0 is constant input for bias; could leave out
-				hiddenNeurons[j].Bias += delta;
-			}
-			#endregion
-			// 4. update output weights
-			for (int k = 0; k < numOutputs; ++k)
-			{
-				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
-				{
-					// Divide output gradients over all inputs.
-					//double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
-					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs.Length;
-					outputNeurons[k].Weights[j] += delta;
-				}
-			}
-		}
-
 		private void ComputeGradients()
 		{
 			//
@@ -157,11 +122,38 @@ namespace NeuralNetwork
 				hGrads[j] = derivative * sum;
 			}
 		}
-
-		private void SetRange(double min, double max, ref double v3)
+		private void UpdateWeights(double learnRate)
 		{
-			if (v3 < min) v3 = min;
-			if (v3 > max) v3 = max;
+
+			// 3a. update hidden weights (gradients must be computed right-to-left but weights
+			// can be updated in any order)
+			for (int j = 0; j < numHidden; ++j)
+			{
+				for (int i = 0; i < numInputs; ++i)
+				{
+					double delta = learnRate * hGrads[j] * hiddenNeurons[j].Inputs[i]; // compute the new delta
+					hiddenNeurons[j].Weights[i] += delta; // update. note we use '+' instead of '-'. this can be very tricky.
+				}
+			}
+			#region BIAS
+			// 3b. update hidden biases
+			for (int j = 0; j < numHidden; ++j)
+			{
+				double delta = learnRate * hGrads[j] * 1.0; // t1.0 is constant input for bias; could leave out
+				hiddenNeurons[j].Bias += delta;
+			}
+			#endregion
+			// 4. update output weights
+			for (int k = 0; k < numOutputs; ++k)
+			{
+				for (int j = 0; j < outputNeurons[k].Inputs.Length; ++j)
+				{
+					// Divide output gradients over all inputs.
+					//double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs[j] / numInputs;
+					double delta = learnRate * oGrads[k] / outputNeurons[k].Inputs.Length;
+					outputNeurons[k].Weights[j] += delta;
+				}
+			}
 		}
 		public Vector ComputeOutputs()
 		{
@@ -169,7 +161,6 @@ namespace NeuralNetwork
 			for (int i = 0; i < numOutputs; i++) this.Output[i] = outputNeurons[i].Execute();
 			return Output;
 		}
-
 		public Vector SetInputs(double[] trainData, int idx)
 		{
 			for (int i = 0; i < Inputs.Length; i++)

@@ -4,18 +4,19 @@ using System.Text;
 namespace Lib
 {
 	/// <summary>
-	/// Description of Vector.
+	/// This Vector class defines an array of doubles.
+	/// And allow vector operations * /
 	/// </summary>
 	public class Vector
 	{
 		private readonly double[] items;
 		public int Length { get { return items.Length; } }
-		public delegate double funct(int r);
 		/// <summary>
 		/// Initialize a vector of length items and fill them with a default value.
 		/// </summary>
-		/// <param name="length"></param>
-		/// <param name="value"></param>
+		/// <param name="length">Vector length</param>
+		/// <param name="value">Value of each vector item</param>
+		#region CONSTRUCTORS
 		public Vector(int length, double defaultValue = 0)
 		{
 			items = new double[length];
@@ -25,6 +26,8 @@ namespace Lib
 		{
 			items = args;
 		}
+		#endregion
+		#region operators
 		public static double operator *(Vector v1, Vector v2)
 		{
 			var dot = 0d;
@@ -49,6 +52,7 @@ namespace Lib
 				items[i] = value;
 			}
 		}
+		#endregion
 		public override string ToString()
 		{
 			var sb = new StringBuilder();

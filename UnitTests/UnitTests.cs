@@ -58,8 +58,8 @@ namespace NeuralNetwork.Tests
 			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 12, $"Error 1 = {mse} epoch 12 -> {nn.Epoch}");
 
 			nn = new NeuralNetwork(numInputs: 1, numHidden: 0, numOutputs: 1);
-			mse = nn.Train(new double[] { 6, .1 }, 100, 1);
-			Assert.IsTrue(mse < 0.01 && nn.Epoch == 1, $"Error 2 = {mse} epoch 1 -> {nn.Epoch} input 6");
+			mse = nn.Train(new double[] { 6, .6 }, 100, 1);
+			Assert.IsTrue(mse < 0.01 && nn.Epoch <= 9, $"Error 2 = {mse} epoch 1 -> {nn.Epoch}");
 		}
 		[TestMethod()]
 		public void TestSingleNeuronTwoInputs()
@@ -152,9 +152,13 @@ namespace NeuralNetwork.Tests
 		[TestMethod]
 		public void TestTrain()
 		{
-			var nn = new NeuralNetwork(1, 0, 1);
+			var xx = new NeuralNetwork(8, 9, 2) { Inputs = new Vector(8, 1) };
+			xx.Train(new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 0.2 }, 100, 1);
+			Program.ShowNeuralNetwork(xx);
+			var nn = new NeuralNetwork(1, 0, 1) { Inputs = new Vector(2, 2) };
+			var IW = nn.outputNeurons[0].ExecuteIW();
+			Assert.IsTrue(nn.outputNeurons[0].Weights[0] == IW / 2, $"Weight should be IW/I");
 			nn.Train(new double[] { 1, 0.001 }, maxEpochs: 1, learnRate: 1);
-
 			Assert.IsTrue(nn.ExpectedOutput == 0.001, $"Expected output must be 0.001 {nn.ExpectedOutput}");
 			Assert.IsTrue(nn.LearnRate == 1, $"LearningRate {nn.LearnRate}");
 			Assert.IsTrue(nn.outputNeurons[0].Inputs[0] == 1, $"Input must be 1 {nn.outputNeurons[0].Inputs[0]}");
